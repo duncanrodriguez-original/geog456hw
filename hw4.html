@@ -1,0 +1,118 @@
+<html>
+    <head>
+        <title>Homework 4</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+        <script src="./ChapelHillRestLoc.js" ></script>
+        <style>
+            body{
+                background-color: rgb(41, 41, 68);
+            }
+            h1{
+                color: rgb(187, 185, 222);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                justify-self: right;
+            }
+            #d2{
+                color: #b10b2e;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                justify-self: right;
+            }
+            #d3{
+                color: #c44862;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                justify-self: right;
+            }
+            #d4{
+                color: #d88596;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                justify-self: right;
+            }
+            #d5{
+                color: #ebc2cb;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                justify-self: right;
+            }
+            #d6{
+                color: #f6e2e6;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                justify-self: right;
+            }
+            #d7{
+                color: #FFFFFF;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                justify-self: right;
+            }
+        </style>
+    </head>
+    <body>
+    <h1>Homwework 4 Chapel Hill Restaurants Overtime</h1> 
+    <div id="d2">The Newest Restaurants are indicated in red, every tone change is a different decade</div>
+    <div id="d2">2020s</div>
+    <div id="d3">2010s</div>
+    <div id="d4">2000s</div>
+    <div id="d5">1990s</div>
+    <div id="d6">1980s</div>
+    <div id="d7">Before</div>
+    <div id="mapid"></div>
+    
+    <style>
+        #mapid{ width: 900px; height: 500px; }
+    </style>
+    <script> 
+    
+    var map = L.map('mapid').setView([35.92119,-79.05965], 11); // YOU CAN CHANGE THE ZOOM
+
+    var osm= L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    var gray = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ'
+        }).addTo(map);
+   
+    function circleIcon (estYear){
+    var geojsonMarkerOptions = {
+    radius: 8,
+    fillColor: getAgeColor(estYear),
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+    }
+    return geojsonMarkerOptions
+}
+
+    // this line is creating the variable map by  initializing the L.map class (a Leaflet class) with the mapid element that we created before. setView is a method that can be applied to the class L.map : you can give it a latitude, longitude and a zoom.  The higher the value of the zoom, the finer the initial scale of the map. 
+
+    var restaurants= L.geoJSON(data, {
+    pointToLayer: function (feature, latlng) {
+        var restaurant= feature.properties.Company
+        var estab=feature.properties.Year
+        return L.circleMarker(latlng, circleIcon(estab)).bindPopup(restaurant+" Est. In "+estab);
+        }
+    });
+    restaurants.addTo(map)
+
+    var baseMaps ={
+        "Open Street Map":osm,
+        "ESRI Gray": gray
+    };
+    var overlayMaps={
+        "Restaurants":restaurants
+    };
+    function getAgeColor(year) {
+            return (year >= 2020) ? "#b10b2e" :  // Dark Red
+                (year >= 2010) ? "#c44862" :  
+                (year >= 2000) ? "#d88596" :  
+                (year >= 1990)  ? "#ebc2cb" :  
+                (year >= 1980)  ? "#f6e2e6" :  
+                "#FFFFFF";                   //white
+    }
+    var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+    </script>
+    </body>
+</html>
