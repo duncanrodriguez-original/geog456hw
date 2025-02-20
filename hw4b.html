@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+/* style and html from https://www.w3schools.com/html/tryit.asp?filename=tryhtml_table_intro */
+table {
+  font-family: Tahoma, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 8px; 
+  overflow: hidden; 
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  color: rgb(213, 183, 64);
+}
+
+td, th {
+  border: 1px solid #0e0202;
+  text-align: left;
+  padding: 10px;
+}
+
+tr:nth-child(even) {
+  background-color: #202533;
+}
+body{
+    background-color: rgb(39, 39, 58);
+}
+h1{
+    color: rgb(187, 185, 222);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-self: right;
+}
+#d2{
+    color: #b10b2e;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-self: right;
+}
+#d3{
+    color: #c44862;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-self: right;
+}
+#d4{
+    color: #d88596;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-self: right;
+}
+#d5{
+    color: #ebc2cb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-self: right;
+}
+#d6{
+    color: #f6e2e6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-self: right;
+}
+#d7{
+    color: #FFFFFF;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-self: right;
+}
+</style>
+</head>
+<script src="./ChapelHillRestLoc.js"></script>
+<body>
+
+    <h1>Homwework 4 Chapel Hill Restaurants Overtime</h1> 
+    <div id="d2">The Newest Restaurants are indicated in red, every tone change is a different decade</div>
+    <div id="d2">2020s</div>
+    <div id="d3">2010s</div>
+    <div id="d4">2000s</div>
+    <div id="d5">1990s</div>
+    <div id="d6">1980s</div>
+    <div id="d7">Before</div>
+
+<table id="mytable">
+  <tr>
+    <th>Company Name</th>
+    <th>Year Established</th>
+  </tr>
+  
+</table>
+</script>
+
+<script>
+  var myDoc = document.getElementById('mytable')
+  
+  for (var i =0; i <data.features.length; i++){
+    var myNewRow = document.createElement('tr');
+    var myNewCell1 = document.createElement('td');
+    var myNewCell2 = document.createElement('td');
+
+    myNewCell1.innerHTML = data.features[i].properties.Company;
+    myNewCell2.innerHTML = data.features[i].properties.Year;
+
+    myNewCell2.style.backgroundColor = getAgeColor(data.features[i].properties.Year)
+
+    myNewRow.append(myNewCell1);
+    myNewRow.append(myNewCell2);
+    myDoc.append(myNewRow);
+
+  }
+
+  function checkType(value) {
+    if (typeof value === "string") {
+        return "String";
+    } else if (typeof value === "number") {
+        return "Number";
+    } else {
+        return "Other";
+    }
+}
+
+    function getAgeColor(year) {
+        return (year >= 2020) ? "#b10b2e":  // Dark Red
+            (year >= 2010) ? "#c44862":  
+            (year >= 2000) ? "#d88596":  
+            (year >= 1990)  ? "#ebc2cb":  
+            (year >= 1980)  ? "#f6e2e6":  
+            "#FFFFFF";                   //white
+}
+</script>
+
+</body>
+
+
+</html>
