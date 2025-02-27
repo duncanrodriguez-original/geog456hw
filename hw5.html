@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework 5</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+   crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+   integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+   crossorigin=""></script>
+
+   <script src="ChapelHillRestLoc.js"></script>
+</head>
+<style>
+    #map { 
+        width: 100%;
+        height: 500px;
+         }
+</style>
+<body>
+    <h3 id ="daYear"></h3>
+    <input id="dateSlider" type = "range" name = "Year" min = "1922" max = "2024" oninput="moveSlider(this.value)">
+    <div id="map"></div>
+    <script>
+        //HW made by Sunwoo Yoon // Edited and annotated by J Arce // Adapted and further changed by Duncan
+
+        var map = L.map('map').setView([35.92119,-79.05965], 11);
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ'
+        }).addTo(map);
+
+        function circleIcon (){
+            var geojsonMarkerOptions = {
+            radius: 8,
+            fillColor: "#b10b2e",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        }
+        return geojsonMarkerOptions
+    }
+
+    // this line is creating the variable map by  initializing the L.map class (a Leaflet class) with the mapid element that we created before. setView is a method that can be applied to the class L.map : you can give it a latitude, longitude and a zoom.  The higher the value of the zoom, the finer the initial scale of the map. 
+
+    var restaurants= L.geoJSON(data, {
+        pointToLayer: function (feature, latlng) {
+        var restaurant= feature.properties.Company
+        var estab=feature.properties.Year
+        if (estab<=myCurrentSelectionYear) {
+        return L.circleMarker(latlng, circleIcon()).bindPopup(restaurant+" Est. In "+estab)
+        }}
+    });
+    restaurants.addTo(map)
+
+    function moveSlider(value) { // function called by the slider that uses the value to select one feature, using the index of the feature array. 
+            //console.log(e.value)
+            map.removeLayer(restaurants);// leaflet method to remove a layer
+            document.getElementById('daYear').innerHTML = 'Year: ' + value
+            myCurrentSelectionYear = value
+            restaurants= L.geoJSON(data, {
+                pointToLayer: function (feature, latlng) {
+                var restaurant= feature.properties.Company
+                var estab=feature.properties.Year
+                if (estab<=myCurrentSelectionYear) {
+                return L.circleMarker(latlng, circleIcon()).bindPopup(restaurant+" Est. In "+estab)
+                }}
+             })
+            map.addLayer(restaurants); // add the new layer    
+        }
+
+    var myCurrentSelectionYear = 1922 // the initial year to start the data
+
+    moveSlider(myCurrentSelectionYear) // run the function moveSlider with the year 1840 to start with our first year. 
+
+    window.onload = function() {
+        document.getElementById('dateSlider').value = 1922;  
+    }; // I added this section to make sure that the slider goes back to 1840 after refreshing
+
+    </script>
+</body>
+</html>
+
+
